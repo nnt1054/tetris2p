@@ -32,7 +32,6 @@ function end(fps, panic) {
 }
 
 
-
 // create Canvas and Initial Game Objects 
 var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d'),
@@ -42,4 +41,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 // var testObject1 = TestObject(1, 2, 3);
 
+
 MainLoop.setUpdate(update).setDraw(draw).setBegin(begin).setEnd(end).start();
+
+var test = new engine();
+test.testMethod();
