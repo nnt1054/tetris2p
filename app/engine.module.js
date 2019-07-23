@@ -4,11 +4,11 @@
 
 class engine {
 
-	constructor(a=1, b=2, sceneList={}, initScene=null) {
-		this.a = a;
-		this.b = b;
+	constructor(sceneList={}, initScene=null, args={}) {
 		this.sceneList = sceneList;
-		this.currentScene = initScene;
+		
+    this.currentScene = new this.sceneList[initScene](this, args);
+
 		this.createCanvas();
 
 		this.update = this.update.bind(this);
@@ -23,22 +23,30 @@ class engine {
 		this.context = this.canvas.getContext('2d'),
 		this.fpsCounter = document.getElementById('fpscounter'),
 		this.fpsValue = document.getElementById('fpsvalue');
-		this.canvas.width = window.innerWidth;
-		this.canvas.height = window.innerHeight;
+
+
+		// this.canvas.width = window.innerWidth;
+		// this.canvas.height = window.innerHeight;
+		this.canvas.width = 800;
+		this.canvas.height = 400;
+
 	}
 
-	testMethod() {
-		console.log('test method');
+	switchScene(scene, args) {
+	 // this.currentScene = new this.sceneList[scene](args)
 	}
 
 	update(delta) {
-	    // call udpate function of each relevent object
-	    console.log(delta);
+	    if (this.currentScene) {
+	        this.currentScene.update(delta);
+	    }
 	}
 
 	draw(interpolationPercentage) {
-    	// call draw function for each relevant object
-    	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    	if (this.currentScene) {
+          this.context.clearRect(0, 0, canvas.width, canvas.height);
+    	    this.currentScene.draw(interpolationPercentage);
+    	}
 	}
 
 	begin() {
