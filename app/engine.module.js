@@ -5,9 +5,12 @@
 class engine {
 
 	constructor(sceneList={}, initScene=null, args={}) {
+
+		window.engine = this; //might want to change this later
+
 		this.sceneList = sceneList;
 		
-    this.currentScene = new this.sceneList[initScene](this, args);
+    	this.currentScene = new this.sceneList[initScene](this, args);
 
 		this.createCanvas();
 
@@ -30,6 +33,28 @@ class engine {
 		this.canvas.width = 800;
 		this.canvas.height = 400;
 
+		// {keyCode: duration held down}
+		this.keyState = {};
+
+		this.canvas.addEventListener('click', function(event) {
+			console.log('single');
+		}, false);
+		this.canvas.addEventListener('dblclick', function(event) {
+			console.log('double');
+		}, false);
+
+		// keep track of keyboard presses
+		document.addEventListener("keydown", function(evt) {
+			if (!(evt.keyCode in window.engine.keyState)) {
+				window.engine.keyState[evt.keyCode] = 0;
+			} else {
+				console.log('key being held down');
+			}
+		});
+		document.addEventListener("keyup", function(evt) {
+			console.log(window.engine.keyState[evt.keyCode])
+			delete window.engine.keyState[evt.keyCode];
+		});
 	}
 
 	switchScene(scene, args) {
@@ -37,6 +62,10 @@ class engine {
 	}
 
 	update(delta) {
+		// update timer for how long keys have been held down
+		for (var key in this.keyState) {
+			this.keyState[key] += delta;
+		}
 	    if (this.currentScene) {
 	        this.currentScene.update(delta);
 	    }
