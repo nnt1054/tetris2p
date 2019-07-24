@@ -35,6 +35,9 @@ class engine {
 
 		// {keyCode: duration held down}
 		this.keyState = {};
+		this.keyUpdateCounter = 0;
+		// {keyCode: update counter}
+		// this.keyUpdates = {};
 
 		this.canvas.addEventListener('click', function(event) {
 			console.log('single');
@@ -47,12 +50,11 @@ class engine {
 		document.addEventListener("keydown", function(evt) {
 			if (!(evt.keyCode in window.engine.keyState)) {
 				window.engine.keyState[evt.keyCode] = 0;
-			} else {
-				console.log('key being held down');
 			}
+			window.engine.keyUpdateCounter = 0;
 		});
 		document.addEventListener("keyup", function(evt) {
-			console.log(window.engine.keyState[evt.keyCode])
+			console.log(String.fromCharCode(evt.keyCode) + ': ' + Math.round(window.engine.keyState[evt.keyCode]) + 'ms');
 			delete window.engine.keyState[evt.keyCode];
 		});
 	}
@@ -63,12 +65,24 @@ class engine {
 
 	update(delta) {
 		// update timer for how long keys have been held down
+		var idle = true;
 		for (var key in this.keyState) {
-			this.keyState[key] += delta;
+			  this.keyState[key] += delta;
+    	  idle = false;
 		}
-	    if (this.currentScene) {
-	        this.currentScene.update(delta);
-	    }
+		
+
+    if (!idle) {
+    	  this.keyUpdateCounter += 1;
+    }
+	  if (this.keyUpdateCounter > 60) {
+	      console.log('keyhold interrupted');
+		    this.keyState = {};
+	  }
+
+    if (this.currentScene) {
+        this.currentScene.update(delta);
+    }
 	}
 
 	draw(interpolationPercentage) {

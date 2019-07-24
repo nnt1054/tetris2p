@@ -23,5 +23,5 @@ class gameObject {
 try {
   	module.exports = gameObject;
 } catch (err) {
-	  console.log('engine export failed');
+	  console.log('gameObject export failed');
 }

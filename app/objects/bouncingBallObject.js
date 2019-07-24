@@ -59,5 +59,5 @@ class bouncingBallObject extends gameObject {
 try {
 	module.exports = bouncingBallObject;
 } catch (err) {
-	console.log('engine export failed');
+	console.log('bouncingBallObject export failed');
 }

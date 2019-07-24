@@ -26,5 +26,5 @@ class backgroundObject extends gameObject {
 try {
 	module.exports = backgroundObject;
 } catch (err) {
-	console.log('engine export failed');
+	console.log('backgroundObject export failed');
 }
