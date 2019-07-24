@@ -40,22 +40,22 @@ class engine {
 		// this.keyUpdates = {};
 
 		this.canvas.addEventListener('click', function(event) {
-			console.log('single');
+			console.log('single', event.x - event.target.offsetLeft, event.y - event.target.offsetTop);
 		}, false);
 		this.canvas.addEventListener('dblclick', function(event) {
-			console.log('double');
+			console.log('double', event.x - event.target.offsetLeft, event.y - event.target.offsetTop);
 		}, false);
 
 		// keep track of keyboard presses
-		document.addEventListener("keydown", function(evt) {
-			if (!(evt.keyCode in window.engine.keyState)) {
-				window.engine.keyState[evt.keyCode] = 0;
+		document.addEventListener("keydown", function(event) {
+			if (!(event.keyCode in window.engine.keyState)) {
+				window.engine.keyState[event.keyCode] = 0;
 			}
 			window.engine.keyUpdateCounter = 0;
 		});
-		document.addEventListener("keyup", function(evt) {
-			console.log(String.fromCharCode(evt.keyCode) + ': ' + Math.round(window.engine.keyState[evt.keyCode]) + 'ms');
-			delete window.engine.keyState[evt.keyCode];
+		document.addEventListener("keyup", function(event) {
+			console.log(String.fromCharCode(event.keyCode) + ': ' + Math.round(window.engine.keyState[event.keyCode]) + 'ms');
+			delete window.engine.keyState[event.keyCode];
 		});
 	}
 
@@ -64,25 +64,28 @@ class engine {
 	}
 
 	update(delta) {
-		// update timer for how long keys have been held down
+
+		// 1. Check for Input
 		var idle = true;
 		for (var key in this.keyState) {
 			  this.keyState[key] += delta;
     	  idle = false;
 		}
-		
+	    if (!idle) {
+	    	  this.keyUpdateCounter += 1;
+	    }
+		  if (this.keyUpdateCounter > 60) {
+		      console.log('keyhold interrupted');
+			    this.keyState = {};
+		  }
 
-    if (!idle) {
-    	  this.keyUpdateCounter += 1;
-    }
-	  if (this.keyUpdateCounter > 60) {
-	      console.log('keyhold interrupted');
-		    this.keyState = {};
-	  }
 
-    if (this.currentScene) {
-        this.currentScene.update(delta);
-    }
+		// 2. Update Game Objects
+	    if (this.currentScene) {
+	        this.currentScene.update(delta);
+    	}
+
+    	// 3. Check Physics Collisions
 	}
 
 	draw(interpolationPercentage) {
