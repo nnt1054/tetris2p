@@ -18,7 +18,7 @@ class switchSceneButtonObject extends gameObject{
     update(delta) {
         this.allowClickDetection(this.clickAABB);
 
-        if (this.isClicked) {
+        if (this.isClicked()) {
             this.scene.engine.switchScene(this.nextScene);
         }
   	}

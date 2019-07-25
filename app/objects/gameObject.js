@@ -7,6 +7,8 @@ class gameObject {
     	this.scene = scene;
   		this.update = this.update.bind(this);
   		this.draw = this.draw.bind(this);
+
+  		this._isClicked = false;
 	}
 
 	update(delta) {
@@ -27,23 +29,38 @@ class gameObject {
 	}
 
 	allowClickDetection(aabb) {
-		this.isClicked = false;
+		this._isClicked = false;
+		this._isClickTarget = (this.scene.clickTarget === this);
 
 		if ('mousedown' in this.scene.engine.mouseEvents) {
 	       	if (this.pointInAABB(this.scene.engine.mouseEvents['mousedown'], aabb)) {
-	           this.mousedown = true;
+	        	this.scene.clickTarget = this;
+	        	this.clickOffsetLeft = this.getMousePos().x - this.clickAABB.min.x;
+	        	this.clickOffsetTop = this.getMousePos().y - this.clickAABB.min.y;
 	       	}
 		}
 
 		if ('mouseup' in this.scene.engine.mouseEvents) {
-	       	if (this.pointInAABB(this.scene.engine.mouseEvents['mouseup'], aabb)) {
-	       		if (this.mousedown) {
-	       			this.isClicked = true;
-	       		}
-	       	}
-        	this.mousedown = false;
+       		if (this.scene.clickTarget === this) {
+		       	if (this.pointInAABB(this.scene.engine.mouseEvents['mouseup'], aabb)) {
+	       			this._isClicked = true;
+		       	}
+	   			this.scene.clickTarget = null;
+       		}
 		}
 
+	}
+
+	isClicked() {
+		return this._isClicked;
+	}
+
+	isClickTarget() {
+		return this._isClickTarget;
+	}
+
+	getMousePos() {
+		return this.scene.engine.mousePos;
 	}
 
 	pointInAABB(point, aabb) {

@@ -34,7 +34,6 @@ class engine {
 		this.canvas.height = 400;
 
 
-
     	// MOUSE INPUT PROCESSOR
         this.mouseEvents = {};
 		this.canvas.addEventListener('click', function(event) {
@@ -43,9 +42,9 @@ class engine {
 		this.canvas.addEventListener('dblclick', function(event) {
 			window.engine.mouseEvents['dblclick'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
 		}, false);
-
 		this.canvas.addEventListener('mousemove', function(event) {
 			window.engine.mouseEvents['mousemove'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
+			window.engine.mousePos = window.engine.mouseEvents['mousemove'];
 		}, false);
 		this.canvas.addEventListener('mousedown', function(event) {
 			window.engine.mouseEvents['mousedown'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
@@ -77,7 +76,6 @@ class engine {
 	}
 
 	switchScene(scene, args) {
-		console.log('switching to scene: ' + scene);
 		this.nextScene = new this.sceneList[scene](this, args);
 	}
 
@@ -97,7 +95,6 @@ class engine {
 		    this.keyUpdateCounter = 0;
 			this.keyState = {};
 		}
-
 
 		// 2. Update Game Objects
 	    if (this.currentScene) {

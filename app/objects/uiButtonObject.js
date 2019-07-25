@@ -18,7 +18,7 @@ class uiButtonObject extends gameObject{
 	update(delta) {
     	this.allowClickDetection(this.clickAABB);
 
-		if (this.isClicked) {
+		if (this.isClicked()) {
            this.colorIndex = (this.colorIndex + 1) % this.colors.length;
 		}
 

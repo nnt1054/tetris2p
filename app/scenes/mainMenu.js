@@ -11,10 +11,10 @@ class mainMenu extends scene {
 	    var background = new backgroundObject(this);
 	    var ball = new bouncingBallObject(this);
 	    var button = new uiButtonObject(this);
-	    var rect = new draggableSquareObject(this);
+	    var rect = new draggableSquareObject(this, 0, 0, name='rect1');
+	   	var rect2 = new draggableSquareObject(this, 50, 50, name='rect2');
 	    var switchSceneButton = new switchSceneButtonObject(this, 'testScene', 'black');
-	    this.gameObjects = [background, ball, rect, switchSceneButton];
-	    console.log('creating mainMenu scene');
+	    this.gameObjects = [background, ball, rect2, rect, switchSceneButton];
 	}
 
 }
