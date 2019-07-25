@@ -7,7 +7,7 @@
 class bouncingBallObject extends gameObject {
   
 
-    constructor(scene) {
+    constructor(scene, color='red') {
         super(scene)
 
         this.x = 128;
@@ -16,7 +16,7 @@ class bouncingBallObject extends gameObject {
         this.lastY = this.y;
         this.radius = 32;
         this.velocity = 0.1;
-        this.color = 'red';
+        this.color = color;
 
     }
 

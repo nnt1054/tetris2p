@@ -9,8 +9,8 @@ class engine {
 		window.engine = this; //might want to change this later
 
 		this.sceneList = sceneList;
-		
     	this.currentScene = new this.sceneList[initScene](this, args);
+    	this.nextScene = null;
 
 		this.createCanvas();
 
@@ -35,7 +35,7 @@ class engine {
 
 
 
-    // MOUSE INPUT PROCESSOR
+    	// MOUSE INPUT PROCESSOR
         this.mouseEvents = {};
 		this.canvas.addEventListener('click', function(event) {
 			window.engine.mouseEvents['click'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
@@ -50,14 +50,15 @@ class engine {
 		this.canvas.addEventListener('mousedown', function(event) {
 			window.engine.mouseEvents['mousedown'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
 		}, false);
-
 		this.canvas.addEventListener('mouseup', function(event) {
 			window.engine.mouseEvents['mouseup'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
 		}, false);
+		this.canvas.addEventListener("contextmenu", function(event) {
+		    event.preventDefault();
+		}, false);
 
 
-
-    // KEYBOARD INPUT PROCESSOR
+    	// KEYBOARD INPUT PROCESSOR
 		this.keyState = {};
 		this.keyPress = {};
 		this.keyUpdateCounter = 0;
@@ -76,25 +77,26 @@ class engine {
 	}
 
 	switchScene(scene, args) {
-	 // this.currentScene = new this.sceneList[scene](args)
+		console.log('switching to scene: ' + scene);
+		this.nextScene = new this.sceneList[scene](this, args);
 	}
 
 	update(delta) {
 
-		// 1. Check for Input
+		// 1. Failsafe for hanging keyStates
 		var idle = true;
 		for (var key in this.keyState) {
-			  this.keyState[key] += delta;
-    	  idle = false;
+			this.keyState[key] += delta;
+    		idle = false;
 		}
 	    if (!idle) {
-	    	  this.keyUpdateCounter += 1;
+	    	this.keyUpdateCounter += 1;
 	    }
-		  if (this.keyUpdateCounter > 60) {
-		      console.log('keyhold interrupted');
-		      this.keyUpdateCounter = 0;
-			    this.keyState = {};
-		  }
+		if (this.keyUpdateCounter > 60) {
+		    console.log('keyhold interrupted');
+		    this.keyUpdateCounter = 0;
+			this.keyState = {};
+		}
 
 
 		// 2. Update Game Objects
@@ -104,16 +106,15 @@ class engine {
 
     	// 3. Check Physics Collisions
     	
-        // 4. Reset mouseEvent and keyPress Dictionary
-        var mousePosition = this.mouseEvents['mousemove'];
-        this.mouseEvents = {'mousemove': mousePosition};
+        // 4. Reset mouseEvent and keyPress Dictionaries
+        this.mouseEvents = {};
         this.keyPress = {};
 	}
 
 	draw(interpolationPercentage) {
     	if (this.currentScene) {
-          this.context.clearRect(0, 0, canvas.width, canvas.height);
-    	    this.currentScene.draw(interpolationPercentage);
+			this.context.clearRect(0, 0, canvas.width, canvas.height);
+			this.currentScene.draw(interpolationPercentage);
     	}
 	}
 
@@ -122,6 +123,13 @@ class engine {
 	}
 
 	end(fps, panic) {
+		// check for scene transition
+		if (this.nextScene) {
+			this.currentScene = this.nextScene;
+			this.nextScene = null;
+		}
+
+
 	    // calculate fps
 	    this.fpsCounter.textContent = Math.round(fps) + ' FPS';
 	    if (panic) {
