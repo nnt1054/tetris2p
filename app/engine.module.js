@@ -33,20 +33,34 @@ class engine {
 		this.canvas.width = 800;
 		this.canvas.height = 400;
 
-		// {keyCode: duration held down}
-		this.keyState = {};
-		this.keyUpdateCounter = 0;
-		// {keyCode: update counter}
-		// this.keyUpdates = {};
 
+
+    // MOUSE INPUT PROCESSOR
+        this.mouseEvents = {};
 		this.canvas.addEventListener('click', function(event) {
-			console.log('single', event.x - event.target.offsetLeft, event.y - event.target.offsetTop);
+			window.engine.mouseEvents['click'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
 		}, false);
 		this.canvas.addEventListener('dblclick', function(event) {
-			console.log('double', event.x - event.target.offsetLeft, event.y - event.target.offsetTop);
+			window.engine.mouseEvents['dblclick'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
 		}, false);
 
-		// keep track of keyboard presses
+		this.canvas.addEventListener('mousemove', function(event) {
+			window.engine.mouseEvents['mousemove'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
+		}, false);
+		this.canvas.addEventListener('mousedown', function(event) {
+			window.engine.mouseEvents['mousedown'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
+		}, false);
+
+		this.canvas.addEventListener('mouseup', function(event) {
+			window.engine.mouseEvents['mouseup'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
+		}, false);
+
+
+
+    // KEYBOARD INPUT PROCESSOR
+		this.keyState = {};
+		this.keyPress = {};
+		this.keyUpdateCounter = 0;
 		document.addEventListener("keydown", function(event) {
 			if (!(event.keyCode in window.engine.keyState)) {
 				window.engine.keyState[event.keyCode] = 0;
@@ -54,9 +68,11 @@ class engine {
 			window.engine.keyUpdateCounter = 0;
 		});
 		document.addEventListener("keyup", function(event) {
-			console.log(String.fromCharCode(event.keyCode) + ': ' + Math.round(window.engine.keyState[event.keyCode]) + 'ms');
+			window.engine.keyPress[event.keyCode] = window.engine.keyState[event.keyCode];
 			delete window.engine.keyState[event.keyCode];
 		});
+
+
 	}
 
 	switchScene(scene, args) {
@@ -76,6 +92,7 @@ class engine {
 	    }
 		  if (this.keyUpdateCounter > 60) {
 		      console.log('keyhold interrupted');
+		      this.keyUpdateCounter = 0;
 			    this.keyState = {};
 		  }
 
@@ -86,6 +103,11 @@ class engine {
     	}
 
     	// 3. Check Physics Collisions
+    	
+        // 4. Reset mouseEvent and keyPress Dictionary
+        var mousePosition = this.mouseEvents['mousemove'];
+        this.mouseEvents = {'mousemove': mousePosition};
+        this.keyPress = {};
 	}
 
 	draw(interpolationPercentage) {

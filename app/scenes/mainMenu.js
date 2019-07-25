@@ -10,7 +10,8 @@ class mainMenu extends scene {
 	    // this method is meant to be overridden, it's literally the only thing that needs to change besides like name
 	    var background = new backgroundObject(this);
 	    var ball = new bouncingBallObject(this);
-	    this.gameObjects = [background, ball];
+	    var button = new uiButtonObject(this);
+	    this.gameObjects = [background, ball, button];
 	}
 
 }
