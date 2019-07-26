@@ -9,9 +9,9 @@ class testScene extends scene {
 	    // instantiate game objects here and connect their object references
 	    // this method is meant to be overridden, it's literally the only thing that needs to change besides like name
 	    var background = new backgroundObject(this);
-	    var ball = new bouncingBallObject(this, 'blue');
 	    var rect = new draggableSquareObject(this);
 	    var switchSceneButton = new switchSceneButtonObject(this, 'mainMenu', 'blue');
+	    var ball = new bouncingBallObject(this, 'blue');
 	    this.gameObjects = [background, ball, switchSceneButton];
 	}
 

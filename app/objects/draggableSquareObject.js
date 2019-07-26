@@ -31,8 +31,7 @@ class draggableSquareObject extends gameObject {
 			var pos = this.getMousePos();
 			var x = pos.x - this.clickOffsetLeft,
 				y = pos.y - this.clickOffsetTop;
-			this.clickAABB.min = {'x': x, 'y': y};
-		    this.clickAABB.max = {'x': x+this.width, 'y': y+this.height};
+			this.clickAABB.setPos(x,y);
 	    }
 
 	}

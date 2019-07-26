@@ -15,17 +15,12 @@ class gameObject {
 	    console.log('update should be overridden');
 	}
 
-	draw(interpolationPercentage) {
-  	  console.log('update should be overridden');
+    draw(interpolationPercentage) {
+  	    console.log('update should be overridden');
 	}
 
 	createAABB(width, height, x=0, y=0) {
-	    return {
-	      'min': {'x': x, 'y': y},
-	      'max': {'x': x+width, 'y': y+height},
-	      'width': width,
-	      'height': height,
-	    }
+        return new AABB(width, height, x, y);
 	}
 
 	allowClickDetection(aabb) {
@@ -68,6 +63,71 @@ class gameObject {
 	}
 
 }
+
+
+class AABB {
+    
+    constructor(width, height, x=0, y=0) {
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        this.lastPos = {'x': x, 'y': y};
+
+        this.anchor = null;
+        this.anchorPos = {'x': 0, 'y': 0}
+        this.anchorees = [];
+    }
+
+    get min() {
+        return {
+            'x': this.x,
+            'y': this.y,
+        }
+    }
+
+    get max() {
+        return {
+            'x': this.x + this.width,
+            'y': this.y + this.height,
+        }
+    }
+
+    get canvasPos() {
+        return {
+            'x': this.x + this.anchorPos.x,
+            'y': this.y + this.anchorPos.y,
+        }
+    }
+
+    setPos(x=null, y=null) {
+        if (x) { this.lastPos.x = this.x; this.x = x; }
+        if (y) { this.lastPos.y = this.y; this.y = y; }
+        this.updateAnchorees();
+    }
+
+    // Called once at the beginning;
+    setAnchor(aabb) {
+        this.anchor = aabb;
+        this.anchorPos = aabb.canvasPos;
+        aabb.anchorees.push(this);
+    }
+
+
+    setAnchorPos(pos) {
+        this.anchorPos = pos;
+        this.updateAnchorees();
+    }
+
+    updateAnchorees() {
+        // if anchor position changed, update positions of anchorees
+        for (var i = 0; i < this.anchorees.length; i++) { 
+            this.anchorees[i].setAnchorPos(this.canvasPos);
+        }
+    }
+
+}
+
 
 try {
   	module.exports = gameObject;

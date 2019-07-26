@@ -10,36 +10,45 @@ class bouncingBallObject extends gameObject {
     constructor(scene, color='red') {
         super(scene)
 
-        this.x = 128;
-        this.y = 128;
-        this.lastX = this.x;
-        this.lastY = this.y;
+  		this.posAABB = this.createAABB(128, 128, 128, 128)
         this.radius = 32;
+        this.speed = 0.1;
         this.velocity = 0.1;
+        this.direction = 1;
         this.color = color;
 
+        this.target = null;
     }
 
     
   	update(delta) {
 
-        this.lastY = this.y;
-        this.y = this.y + this.velocity * delta;
+        this.lastY = this.posAABB.canvasPos.y;
+        let y = this.posAABB.min.y + this.velocity * delta
+        this.posAABB.setPos(this.posAABB.x, y);
 
-        if (this.y > this.scene.engine.canvas.height && this.velocity > 0) {
-          this.velocity = -this.velocity;
-        } else if (this.y < 0 && this.velocity < 0) {
-          this.velocity = -this.velocity;
+        let canvasPos = this.posAABB.canvasPos;
+        if (canvasPos.y > this.scene.engine.canvas.height && this.velocity > 0) {
+            this.velocity = -this.velocity;
+        } else if (canvasPos.y < 0 && this.velocity < 0) {
+            this.velocity = -this.velocity;
         }
-
+        
+        // if (this.posAABB.y > 0 && this.velocity > 0) {
+        //     this.velocity = -this.velocity;
+        // } else if (this.posAABB.y < 0 && this.velocity < 0) {
+        //     this.velocity = -this.velocity;
+        // }
 
     }
 
   
   	draw(interpolationPercentage) {
         // Interpolate with the last position to reduce stuttering.
-        var y = this.lastY + (this.y - this.lastY) * interpolationPercentage;
-        this.circle(this.scene.engine.context, this.x, y);
+        let canvasPos = this.posAABB.canvasPos
+        // var y = canvasPos.y;
+        var y = this.lastY + (canvasPos.y - this.lastY) * interpolationPercentage;
+        this.circle(this.scene.engine.context, canvasPos.x, y);
 
         // this.scene.engine.context.circle(this.x, y, this.radius, this.color);
         // this.scene.engine.context.fillRect
