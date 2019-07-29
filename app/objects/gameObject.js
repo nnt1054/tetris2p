@@ -77,6 +77,8 @@ class AABB {
         this.anchor = null;
         this.anchorPos = {'x': 0, 'y': 0}
         this.anchorees = [];
+
+        this.foundCollisions = [];
     }
 
     get min() {
@@ -113,7 +115,6 @@ class AABB {
         aabb.anchorees.push(this);
     }
 
-
     setAnchorPos(pos) {
         this.anchorPos = pos;
         this.updateAnchorees();
@@ -124,6 +125,29 @@ class AABB {
         for (var i = 0; i < this.anchorees.length; i++) { 
             this.anchorees[i].setAnchorPos(this.canvasPos);
         }
+    }
+
+    checkCollision(aabb) {
+        if (this.max.x < aabb.min.x || this.min.x > aabb.max.x) {
+            return false;
+        } else if (this.max.y < aabb.min.y || this.min.y > aabb.max.y) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    checkCollisions(aabbList) {
+        var collisions = [];
+        for (var i = 0; i < aabbList.length; i++) {
+            if (aabbList[i] == this) {
+                continue;
+            }
+            if (this.checkCollision(aabbList[i])) {
+                collisions.push(aabbList[i]);
+            }
+        }
+        return collisions;
     }
 
 }

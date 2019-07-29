@@ -34,6 +34,11 @@ class draggableSquareObject extends gameObject {
 			this.clickAABB.setPos(x,y);
 	    }
 
+
+	    var collisions = this.clickAABB.checkCollisions(this.scene.draggableSquares);
+	    if (collisions.length > 0) {
+	    	console.log(collisions[0]);
+	    }
 	}
 
 	draw(interpolationPercentage) {

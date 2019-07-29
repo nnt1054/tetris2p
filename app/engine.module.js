@@ -49,13 +49,16 @@ class engine {
 		this.canvas.addEventListener('mousedown', function(event) {
 			window.engine.mouseEvents['mousedown'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
 		}, false);
-		this.canvas.addEventListener('mouseup', function(event) {
-			window.engine.mouseEvents['mouseup'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
-		}, false);
+		// this.canvas.addEventListener('mouseup', function(event) {
+		// 	window.engine.mouseEvents['mouseup'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
+		// }, false);
 		this.canvas.addEventListener("contextmenu", function(event) {
 		    event.preventDefault();
 		}, false);
 
+		document.addEventListener('mouseup', function(event) {
+			window.engine.mouseEvents['mouseup'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
+		}, false);
 
     	// KEYBOARD INPUT PROCESSOR
 		this.keyState = {};
