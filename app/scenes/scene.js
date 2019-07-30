@@ -3,10 +3,12 @@ class scene {
 	constructor(engine, args={}) {
 
         this.engine = engine;
+        this.canvas = this.engine.canvas;
         this.gameObjects = [];
         this.layerOrder = [];
         this.layers = {};
         this.setup(args);
+
     	// this.update = this.update.bind(this);
     	// this.draw = this.draw.bind(this);
 	}
@@ -17,9 +19,9 @@ class scene {
 	 // this method is meant to be overridden, it's literally the only thing that needs to change besides like name
 	}
 
-  switchScene(scene, args) {
-    this.engine.switchScene(scene, args);
-  }
+    switchScene(scene, args) {
+        this.engine.switchScene(scene, args);
+    }
 
 	update(delta) {
       for (var i = 0; i < this.gameObjects.length; i++) { 

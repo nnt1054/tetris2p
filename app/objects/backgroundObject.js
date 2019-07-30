@@ -12,7 +12,6 @@ class backgroundObject extends gameObject {
 
     
   	update(delta) {
-  	   // jeff
   	}
 
   

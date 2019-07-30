@@ -7,12 +7,11 @@ class engine {
 	constructor(sceneList={}, initScene=null, args={}) {
 
 		window.engine = this; //might want to change this later
+		this.createCanvas();
 
 		this.sceneList = sceneList;
     	this.currentScene = new this.sceneList[initScene](this, args);
     	this.nextScene = null;
-
-		this.createCanvas();
 
 		this.update = this.update.bind(this);
 		this.draw = this.draw.bind(this);
@@ -49,9 +48,6 @@ class engine {
 		this.canvas.addEventListener('mousedown', function(event) {
 			window.engine.mouseEvents['mousedown'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
 		}, false);
-		// this.canvas.addEventListener('mouseup', function(event) {
-		// 	window.engine.mouseEvents['mouseup'] = {'x': event.x - event.target.offsetLeft, 'y': event.y - event.target.offsetTop}
-		// }, false);
 		this.canvas.addEventListener("contextmenu", function(event) {
 		    event.preventDefault();
 		}, false);
@@ -72,6 +68,7 @@ class engine {
 		});
 		document.addEventListener("keyup", function(event) {
 			window.engine.keyPress[event.keyCode] = window.engine.keyState[event.keyCode];
+			// console.log(event.keyCode + ': ' + Math.round(window.engine.keyPress[event.keyCode]));
 			delete window.engine.keyState[event.keyCode];
 		});
 
