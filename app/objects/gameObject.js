@@ -130,9 +130,9 @@ class AABB {
 
 
     checkCollision(aabb) {
-        if (this.max.x < aabb.min.x || this.min.x > aabb.max.x) {
+        if (this.max.x <= aabb.min.x || this.min.x >= aabb.max.x) {
             return false;
-        } else if (this.max.y < aabb.min.y || this.min.y > aabb.max.y) {
+        } else if (this.max.y <= aabb.min.y || this.min.y >= aabb.max.y) {
             return false;
         } else {            
             return true;
