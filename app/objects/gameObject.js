@@ -127,27 +127,14 @@ class AABB {
         }
     }
 
+
+
     checkCollision(aabb) {
-        var xAxis = false,
-            yAxis = false;
-        
-        var directions = [];
-        if (this.max.x < aabb.min.x) {
-        } else if (this.min.x > aabb.max.x) {
-        } else {    
-            xAxis = true;
-        }
-            
         if (this.max.x < aabb.min.x || this.min.x > aabb.max.x) {
             return false;
         } else if (this.max.y < aabb.min.y || this.min.y > aabb.max.y) {
             return false;
-        } else {
-            // overlap among both axis
-            
-            return true;
-        }
-        if (xAxis && yAxis) {
+        } else {            
             return true;
         }
     }
@@ -165,6 +152,39 @@ class AABB {
         return collisions;
     }
 
+
+    // Following Functions Assume Collision Exists with AABB
+    ifLeftCollision(aabb) {
+        return (this.max.x > aabb.max.x);
+    }
+
+    ifLeftCollisionOnly(aabb) {
+        return (this.max.x > aabb.max.x && this.min.x > aabb.min.x);
+    }
+
+    ifRightCollision(aabb) {
+        return (this.min.x < aabb.min.x);
+    }
+
+    ifRightCollisionOnly(aabb) {
+        return (this.min.x < aabb.min.x && this.max.x < aabb.max.x);
+    }
+
+    ifTopCollision(aabb) {
+        return (this.max.y > aabb.max.y);
+    }
+
+    ifTopCollisionOnly(aabb) {
+        return (this.max.y > aabb.max.y && this.min.y > aabb.min.y);
+    }
+
+    ifBottomCollision(aabb) {
+        return (this.min.y < aabb.min.y);
+    }
+
+    ifBottomCollisionOnly(aabb) {
+        return (this.max.y < aabb.max.y && this.min.y < aabb.min.y);
+    }
 }
 
 

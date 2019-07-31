@@ -55,23 +55,19 @@ class playerObject extends gameObject {
 			// checking for y values
 			for (var i = 0; i < collisions.length; i++) {
 				var aabb2 = collisions[i];
-				if (this.yVel < 0) {
-					// check for top collisions
-					if (this.AABB.min.y < aabb2.max.y) {
-						this.y = aabb2.max.y;
-						this.yVel = 0;
-					}
-				} else {
-					// check for bottom collisions
-					if (this.AABB.max.y > aabb2.min.y) {
-						this.y = aabb2.min.y - this.AABB.height;
-						if (Math.abs(this.yVel) > 0.5) {
-						    this.yVel = -this.yVel*0.6;
-						} else {
-						    this.yVel = 0;
-						}
-						this.jumpTimer = 0;
-					}
+				if (this.AABB.ifRightCollisionOnly(aabb2)) {
+					console.log('right!');
+					this.x = aabb2.min.x - this.AABB.width;
+				} else if (this.AABB.ifLeftCollisionOnly(aabb2)) {
+					console.log('left!');
+					this.x = aabb2.max.x;
+				} else if (this.AABB.ifTopCollisionOnly(aabb2)) {
+					this.y = aabb2.max.y;
+					this.yVel = 0;
+				} else if (this.AABB.ifBottomCollisionOnly(aabb2)) {
+					this.y = aabb2.min.y - this.AABB.height;
+				    this.yVel = 0;
+					this.jumpTimer = 0;
 				}
 			}
 
