@@ -128,11 +128,26 @@ class AABB {
     }
 
     checkCollision(aabb) {
+        var xAxis = false,
+            yAxis = false;
+        
+        var directions = [];
+        if (this.max.x < aabb.min.x) {
+        } else if (this.min.x > aabb.max.x) {
+        } else {    
+            xAxis = true;
+        }
+            
         if (this.max.x < aabb.min.x || this.min.x > aabb.max.x) {
             return false;
         } else if (this.max.y < aabb.min.y || this.min.y > aabb.max.y) {
             return false;
         } else {
+            // overlap among both axis
+            
+            return true;
+        }
+        if (xAxis && yAxis) {
             return true;
         }
     }

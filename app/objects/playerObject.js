@@ -29,9 +29,6 @@ class playerObject extends gameObject {
 			d = 68,
 			space = 32;
 
-		this.prevX = this.x;
-		this.prevY = this.y;
-
 		if (a in this.scene.engine.keyState) {
 			this.x -= this.xVel;
 		}
@@ -55,7 +52,7 @@ class playerObject extends gameObject {
 		var collisions = this.AABB.checkCollisions(this.scene.staticObjects);
 		if (collisions.length > 0) {
 
-			// check for y values
+			// checking for y values
 			for (var i = 0; i < collisions.length; i++) {
 				var aabb2 = collisions[i];
 				if (this.yVel < 0) {
@@ -68,7 +65,11 @@ class playerObject extends gameObject {
 					// check for bottom collisions
 					if (this.AABB.max.y > aabb2.min.y) {
 						this.y = aabb2.min.y - this.AABB.height;
-						this.yVel = 0;
+						if (Math.abs(this.yVel) > 0.5) {
+						    this.yVel = -this.yVel*0.6;
+						} else {
+						    this.yVel = 0;
+						}
 						this.jumpTimer = 0;
 					}
 				}
